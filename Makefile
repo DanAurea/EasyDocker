@@ -10,7 +10,9 @@ ELOG=$(shell ls -l | grep Docker_$(CTN).log | wc -l)
 
 # Sharing options
 SHARE=
-CPU=160
+USAGECPU=15.625
+# Compute value for 15.625% of cpu usage 
+CPU=$(shell echo $$(echo "$(USAGECPU) * 1024/100" | bc ))
 CPUCORES=
 MEM=1360
 MEMS=
@@ -125,7 +127,7 @@ endif
 	@$(MAKE) del-ctn > /dev/null # Delete existing container with same name
 
 	@echo "\nA container $(CTN) will be created [...]"
-	@docker run $(SHARE) $(PUBLISH) $(MOUNT) --name $(CTN) $(RFLAGS) $(IMG) $(CMD) # Build new container
+	docker run $(SHARE) $(PUBLISH) $(MOUNT) --name $(CTN) $(RFLAGS) $(IMG) $(CMD) # Build new container
 	@echo "Container $(CTN) is now created"
 
 # Delete container
